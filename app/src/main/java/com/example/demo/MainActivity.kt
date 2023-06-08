@@ -102,20 +102,22 @@ class UserViewModel : ViewModel() {
 
     fun success() {
         _uiState.update { currState ->
-            if (currState is UserBloc.UiState.Loading) {
-                UserBloc.UiState.Success(UserBloc.User("name", 1))
-            } else {
-                currState
+            when (currState) {
+                is UserBloc.UiState.Loading -> {
+                    UserBloc.UiState.Success(UserBloc.User("name", 1))
+                }
+                else -> currState
             }
         }
     }
 
     fun error(error: Error) {
         _uiState.update { currState ->
-            if (currState is UserBloc.UiState.Success) {
-                UserBloc.UiState.Error(error)
-            } else {
-                currState
+            when (currState) {
+                is UserBloc.UiState.Error -> {
+                    UserBloc.UiState.Error(error)
+                }
+                else -> currState
             }
         }
     }
