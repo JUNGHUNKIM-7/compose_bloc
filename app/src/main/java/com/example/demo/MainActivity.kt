@@ -45,7 +45,7 @@ fun Greeting(vm: UserViewModel = viewModel()) {
                 Text("Loading")
             }
             is UserBloc.UiState.Success -> {
-                Text(state.data.name)
+                Text(state.user.name)
             }
             is UserBloc.UiState.Error -> {
                 Text("${state.error.message}")
@@ -69,7 +69,7 @@ object UserBloc {
 
     sealed class UiState {
         object Loading : UiState()
-        data class Success(val data: User) : UiState()
+        data class Success(val user: User) : UiState()
         data class Error(val error: Throwable) : UiState()
     }
 
@@ -81,7 +81,7 @@ object UserBloc {
     operator fun invoke(
         vm: UserViewModel,
         uiAction: UiAction,
-        error: Error? = null,
+        error: Throwable? = null,
     ) {
         when (uiAction) {
             is UiAction.Success -> {
@@ -111,7 +111,7 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun error(error: Error) {
+    fun error(error: Throwable) {
         _uiState.update { currState ->
             when (currState) {
                 is UserBloc.UiState.Error -> {
