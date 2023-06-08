@@ -37,29 +37,29 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(vm: UserViewModel = viewModel()) {
-    val state = vm.state.collectAsState()
+    val state = vm.state.collectAsState().value
 
     Column {
-        when (state.value) {
+        when (state) {
             is UserBloc.UiState.Loading -> {
                 Text("Loading")
             }
             is UserBloc.UiState.Success -> {
-                Text((state.value as UserBloc.UiState.Success).data.name)
+                Text(state.data.name)
             }
             is UserBloc.UiState.Error -> {
-                Text("${(state.value as UserBloc.UiState.Error).error.message}")
+                Text("${state.error.message}")
             }
         }
         Button(
             onClick = { UserBloc(vm = vm, uiAction = UserBloc.UiAction.Success) },
-            content = { Text("click") }
+            content = { Text("success") }
         )
         Button(
             onClick = {
                 UserBloc(vm = vm, uiAction = UserBloc.UiAction.Error, error = Error("error"))
             },
-            content = { Text("Click me") }
+            content = { Text("error") }
         )
     }
 }
