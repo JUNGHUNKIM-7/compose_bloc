@@ -114,7 +114,7 @@ class UserViewModel : ViewModel() {
     fun error(error: Throwable) {
         _uiState.update { currState ->
             when (currState) {
-                is UserBloc.UiState.Error -> {
+                is UserBloc.UiState.Success -> {
                     UserBloc.UiState.Error(error)
                 }
                 else -> currState
